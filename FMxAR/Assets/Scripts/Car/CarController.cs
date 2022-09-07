@@ -54,8 +54,6 @@ public class CarController : MonoBehaviour
             throttleInput = Input.GetKey(KeyCode.S) ? -1 : throttleInput;
             brakeInput = Input.GetKey(KeyCode.Space) ? 1 : 0;
             boostInput = Input.GetKey(KeyCode.LeftShift);
-
-        
         #endif
 
         _steeringAngle = (maxSteeringAngle * horizontalInput) * _steeringDamp;
@@ -75,6 +73,7 @@ public class CarController : MonoBehaviour
                 foreach (Wheel wheel in info.wheels)
                 {
                     wheel.GetWheelCollider().motorTorque = _engine.GetTorque(boostInput) * throttleInput;
+                    
                 }
             }
 
@@ -83,6 +82,9 @@ public class CarController : MonoBehaviour
                 wheel.GetWheelCollider().brakeTorque = brakeInput * brakeTorque;
             }
         }
+
+        // Remove Boost if we are boosting
+        _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
 
         // Clamp steeringDamp
         _steeringDamp = Mathf.Clamp(_steeringDamp, _minSteeringDamp, 1f);

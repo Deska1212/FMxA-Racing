@@ -171,9 +171,9 @@ Transform:
   m_Children:
   - {fileID: 1881933234}
   - {fileID: 2035604113}
+  - {fileID: 942346879}
   - {fileID: 365155980}
   - {fileID: 815732026}
-  - {fileID: 942346879}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -190,8 +190,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standardTorque: 50
-  boostTorque: 100
+  boostTorque: 1000
   boost: 100
+  boostRemovedPerSec: 1
 --- !u!114 &39899593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,15 +205,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b40f5388ce95247b6e5fe58fb8ae0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _steeringAngle: 0
+  _steeringDamp: 1
+  centerOfMass: {x: 0, y: 0, z: 0}
+  maxSteeringAngle: 25
+  maxSpeed: 27.8
+  brakeTorque: 700
   axleInfos:
   - name: Front Axle
     motor: 1
     steer: 1
-    wheels: []
+    wheels:
+    - {fileID: 365155981}
+    - {fileID: 815732027}
   - name: Rear Axle
     motor: 0
     steer: 0
-    wheels: []
+    wheels:
+    - {fileID: 2035604114}
+    - {fileID: 942346880}
+  horizontalInput: 0
+  brakeInput: 0
+  reverseInput: 0
+  throttleInput: 0
+  boostInput: 0
 --- !u!1 &44358580
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +397,7 @@ GameObject:
   - component: {fileID: 365155980}
   - component: {fileID: 365155981}
   m_Layer: 0
-  m_Name: Wheel (1)
+  m_Name: Wheel_FrontRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -401,7 +417,7 @@ Transform:
   - {fileID: 707061671}
   - {fileID: 835503356}
   m_Father: {fileID: 39899591}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &365155981
 MonoBehaviour:
@@ -802,7 +818,7 @@ GameObject:
   - component: {fileID: 815732026}
   - component: {fileID: 815732027}
   m_Layer: 0
-  m_Name: Wheel (2)
+  m_Name: Wheel_FrontLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -822,7 +838,7 @@ Transform:
   - {fileID: 307009783}
   - {fileID: 496401124}
   m_Father: {fileID: 39899591}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &815732027
 MonoBehaviour:
@@ -942,7 +958,7 @@ GameObject:
   - component: {fileID: 942346879}
   - component: {fileID: 942346880}
   m_Layer: 0
-  m_Name: Wheel (3)
+  m_Name: Wheel_BackLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -962,7 +978,7 @@ Transform:
   - {fileID: 897847371}
   - {fileID: 1441698434}
   m_Father: {fileID: 39899591}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &942346880
 MonoBehaviour:
@@ -1913,7 +1929,7 @@ GameObject:
   - component: {fileID: 2035604113}
   - component: {fileID: 2035604114}
   m_Layer: 0
-  m_Name: Wheel
+  m_Name: Wheel_BackRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

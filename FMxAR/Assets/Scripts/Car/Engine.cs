@@ -11,6 +11,8 @@ public class Engine : MonoBehaviour
     [SerializeField]
     private float boost;
 
+    public float boostRemovedPerSec;
+
 
     
 
@@ -40,5 +42,10 @@ public class Engine : MonoBehaviour
     public void SetBoostToValue(float setTo)
     { 
         
+    }
+
+    public void RemoveBoost(float value)
+    {
+        boost -= boostRemovedPerSec * value;
     }
 }
