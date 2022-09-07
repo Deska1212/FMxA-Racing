@@ -12,21 +12,17 @@ public class Engine : MonoBehaviour
     private float boost;
 
 
-    private bool isBoosting;
+    
 
-    /// <summary>
-    /// Get: Returns true if the engine is boosting, Set: Sets wether or not the engine is boost.
-    /// </summary>
-    public bool IsBoosting
-    {
-        get { return isBoosting; }
-        set { isBoosting = value; }
-    }
 
     /// <returns>Current Engine torque based on input</returns>
-    public float GetTorque()
-    { 
-        // Check if we are boosting and return either standardTorqie or boostTorque
+    public float GetTorque(bool boosting)
+    {
+        if (boosting && boost > 0)
+        {
+            return boostTorque;
+        }
+        
         return standardTorque;
     }
 
