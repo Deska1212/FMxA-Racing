@@ -8,7 +8,7 @@ public class Wheel : MonoBehaviour
     private float forwardSlip;
     private bool isSlipping;
 
-    private GameObject wheelGraphic;
+    public GameObject wheelGraphic;
     private WheelCollider wheelCollider;
 
     // ScriptableObject that hold a wheel configuration we can build from
@@ -27,7 +27,7 @@ public class Wheel : MonoBehaviour
     private bool InitWheelCollider()
     {
         // Grab the collider from the gameobject
-        wheelCollider = GetComponent<WheelCollider>();
+        wheelCollider = GetComponentInChildren<WheelCollider>();
 
         if (wheelCollider == null)
         {
@@ -99,5 +99,19 @@ public class Wheel : MonoBehaviour
     private void Start()
     {
         InitWheelCollider();
+    }
+
+    private void Update()
+    {
+        UpdateGraphicPosition();
+    }
+
+    private void UpdateGraphicPosition()
+    {
+        Vector3 position;
+        Quaternion rotation;
+        wheelCollider.GetWorldPose(out position, out rotation);
+        wheelGraphic.transform.position = position;
+        wheelGraphic.transform.rotation = rotation;
     }
 }
