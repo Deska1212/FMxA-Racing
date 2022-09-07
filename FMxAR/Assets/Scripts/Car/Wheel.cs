@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Wheel : MonoBehaviour
 {
+    public string name;
     private float lateralSlip;
     private float forwardSlip;
     private bool isSlipping;
@@ -59,6 +61,7 @@ public class Wheel : MonoBehaviour
         JointSpring jointSpring = new JointSpring();
         jointSpring.spring = wheelProperties.springyness;
         jointSpring.damper = wheelProperties.damp;
+        jointSpring.targetPosition = wheelProperties.targetPos;
 
         wheelCollider.suspensionSpring = jointSpring;
 

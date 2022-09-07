@@ -12,8 +12,10 @@ public class CarController : MonoBehaviour
     private bool _canInput;
     private bool _carGrounded;
     private Engine _engine;
-    private float _steeringAngle;
-    private float _steeringDamp;
+    [SerializeField] private float _steeringAngle;
+    [SerializeField] private float _steeringDamp;
+
+    public float maxSteeringAngle;
 
     // Singleton
     public static CarController instance;
@@ -21,8 +23,8 @@ public class CarController : MonoBehaviour
 
     public List<AxleInfo> axleInfos = new List<AxleInfo>();
 
-    public AnimationCurve curve;
-    public WheelFrictionCurve friction;
+
+    public float horizontalInput;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +35,21 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+#if UNITY_EDITOR
+        horizontalInput = Input.GetAxis("Horizontal");
+#endif
+        _steeringAngle = (maxSteeringAngle * horizontalInput) * _steeringDamp;
+
+        foreach (AxleInfo info in axleInfos)
+        {
+            if (info.steer)
+            {
+                foreach (Wheel wheel in info.wheels)
+                {
+                    wheel.GetWheelCollider().steerAngle = _steeringAngle;
+                }
+            }
+        }
     }
 }
 
@@ -43,6 +59,7 @@ public class CarController : MonoBehaviour
 [System.Serializable]
 public struct AxleInfo
 {
+    public string name;
     public bool motor;
     public bool steer;
     public List<Wheel> wheels;

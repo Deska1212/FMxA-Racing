@@ -14,6 +14,7 @@ public class WheelProperties : ScriptableObject
     // Suspension
     public float springyness;
     public float damp;
+    public float targetPos;
 
     // Curve that we will build friction curve from
     public AnimationCurve forwardCurve;

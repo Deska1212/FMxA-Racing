@@ -15,6 +15,7 @@ MonoBehaviour:
   dampingRate: 0.25
   springyness: 35000
   damp: 4500
+  targetPos: 0.5
   forwardCurve:
     serializedVersion: 2
     m_Curve:

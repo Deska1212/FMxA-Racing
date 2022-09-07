@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Engine
+public class Engine : MonoBehaviour
 {
     [SerializeField]
     private float standardTorque;
