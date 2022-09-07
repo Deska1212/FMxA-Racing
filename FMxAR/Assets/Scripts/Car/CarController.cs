@@ -10,17 +10,18 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
 
-    private bool _canInput;
-    private bool _carGrounded;
+    [SerializeField] private bool _canInput;
+    [SerializeField] private bool _carGrounded;
     private Engine _engine;
     private Rigidbody _rb;
     [SerializeField] private float _steeringAngle;
     [SerializeField] private float _steeringDamp;
+    [SerializeField] private float _downforce;
     private const float _minSteeringDamp = 0.5f;
-    private float downforce;
 
     public Vector3 centerOfMass;
     public float maxSteeringAngle;
+    public float maxDownforce; // This is downforce at maxSpeed
     public float maxSpeed;
     public float brakeTorque;
 
@@ -40,7 +41,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InitCar();
+        InitializeCar();
     }
 
     
@@ -49,15 +50,36 @@ public class CarController : MonoBehaviour
     void Update()
     {
         #if UNITY_EDITOR
-            horizontalInput = Input.GetAxis("Horizontal");
-            throttleInput = Input.GetKey(KeyCode.W) ? 1 : 0;
-            throttleInput = Input.GetKey(KeyCode.S) ? -1 : throttleInput;
-            brakeInput = Input.GetKey(KeyCode.Space) ? 1 : 0;
-            boostInput = Input.GetKey(KeyCode.LeftShift);
-        #endif
+            HandlePCInputs();
+#endif
+
+        
 
         _steeringAngle = (maxSteeringAngle * horizontalInput) * _steeringDamp;
 
+        UpdateAxles();
+        HandleDownForce();
+        _carGrounded =  GetGroundedStatus();
+
+        // Remove Boost if we are boosting
+        _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
+
+        // Clamp steeringDamp
+        _steeringDamp = Mathf.Clamp(_steeringDamp, _minSteeringDamp, 1f);
+        _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
+    }
+
+    private void HandlePCInputs()
+    {
+        horizontalInput = Input.GetAxis("Horizontal");
+        throttleInput = Input.GetKey(KeyCode.W) ? 1 : 0;
+        throttleInput = Input.GetKey(KeyCode.S) ? -1 : throttleInput;
+        brakeInput = Input.GetKey(KeyCode.Space) ? 1 : 0;
+        boostInput = Input.GetKey(KeyCode.LeftShift);
+    }
+
+    private void UpdateAxles()
+    {
         foreach (AxleInfo info in axleInfos)
         {
             if (info.steer)
@@ -73,7 +95,7 @@ public class CarController : MonoBehaviour
                 foreach (Wheel wheel in info.wheels)
                 {
                     wheel.GetWheelCollider().motorTorque = _engine.GetTorque(boostInput) * throttleInput;
-                    
+
                 }
             }
 
@@ -82,22 +104,38 @@ public class CarController : MonoBehaviour
                 wheel.GetWheelCollider().brakeTorque = brakeInput * brakeTorque;
             }
         }
-
-        // Remove Boost if we are boosting
-        _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
-
-        // Clamp steeringDamp
-        _steeringDamp = Mathf.Clamp(_steeringDamp, _minSteeringDamp, 1f);
-        _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
     }
 
-    private void InitCar()
+    private void HandleDownForce()
+    {
+        // Calculate downforce based on speed
+        _downforce = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude) * maxDownforce;
+        _rb.AddForce(Vector3.down * _downforce);
+    }
+
+    private void InitializeCar()
     {
         _rb = GetComponent<Rigidbody>();
         _engine = GetComponent<Engine>();
 
         _rb.centerOfMass = centerOfMass;
     }
+
+    private bool GetGroundedStatus()
+    {
+        foreach (AxleInfo info in axleInfos)
+        {
+            foreach (Wheel wheel in info.wheels)
+            {
+                if (wheel.GetWheelCollider().isGrounded == false)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
 
 /// <summary>
