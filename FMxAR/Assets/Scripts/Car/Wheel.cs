@@ -8,8 +8,9 @@ public class Wheel : MonoBehaviour
 {
     public string name;
     [SerializeField] private float lateralSlip;
+    [SerializeField] private float extSlip;
     [SerializeField] private float forwardSlip;
-    private bool isSlipping;
+    [SerializeField] private bool isSlipping;
 
     public GameObject wheelGraphic;
     private WheelCollider wheelCollider;
@@ -109,6 +110,7 @@ public class Wheel : MonoBehaviour
     {
         UpdateGraphicPosition();
         UpdateSlipValues();
+        isSlipping = IsSlipping();
     }
 
     private void UpdateSlipValues()
@@ -146,5 +148,10 @@ public class Wheel : MonoBehaviour
         Color cubeColour = Color.Lerp(Color.green, Color.red, lateralSlip);
         Gizmos.color = cubeColour;
         Gizmos.DrawCube(transform.position, new Vector3(0.25f, 0.25f, 0.25f));
+    }
+
+    public bool IsSlipping()
+    {
+        return lateralSlip > 0.6 || forwardSlip > 0.6;
     }
 }
