@@ -15,7 +15,7 @@ public class Engine : MonoBehaviour
     private float boost;            // How much boost we have stored
 
     private const float boostAcqWhenInThreshold = 20f;   // Boost we get per second we are within threshold
-    private const float boostAcqSpeedThreshold = 0.6f;  // Percentage of speed we have to be below before we start getting boost
+    private const float boostAcqSpeedThreshold = 0.85f;  // Percentage of speed we have to be below before we start getting boost
     private const float boostRemovedPerSec = 10f;        // Boost we loose per second when boosting
 
     public bool isBoosting; // Are we boosting, use this for checking with other classes, not CarController.boostInput, as that is for checking input

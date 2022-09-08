@@ -151,7 +151,7 @@ public class CarController : MonoBehaviour
 
     private void HandlePCInputs()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
         throttleInput = Input.GetKey(KeyCode.W) ? 1 : 0;
         throttleInput = Input.GetKey(KeyCode.S) ? -1 : throttleInput;
         brakeInput = Input.GetKey(KeyCode.Space) ? 1 : 0;
@@ -170,6 +170,14 @@ public class CarController : MonoBehaviour
                 }
             }
 
+            if (!info.steer)
+            {
+                foreach (Wheel wheel in info.wheels)
+                { 
+                    wheel.GetWheelCollider().brakeTorque = brakeInput * brakeTorque;
+                }
+            }
+
             if (info.motor)
             {
                 foreach (Wheel wheel in info.wheels)
@@ -179,10 +187,7 @@ public class CarController : MonoBehaviour
                 }
             }
 
-            foreach (Wheel wheel in info.wheels)
-            {
-                wheel.GetWheelCollider().brakeTorque = brakeInput * brakeTorque;
-            }
+            
         }
     }
 
