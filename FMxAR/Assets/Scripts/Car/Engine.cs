@@ -6,22 +6,22 @@ using UnityEngine;
 public class Engine : MonoBehaviour
 {
     [SerializeField]
-    private float standardTorque;
+    private float standardTorque;   // Standard torque we provide when still (Torque scales down with speed)
     [SerializeField]
-    private float minTorque;
+    private float minTorque;        // Minimum torque we will scale down to
     [SerializeField]
-    private float boostTorque;
+    private float boostTorque;      // Torque we provide when boosting
     [SerializeField]
-    private float boost;
+    private float boost;            // How much boost we have stored
 
-    private const float boostAcqWhenInThreshold = 20f;
-    private const float boostAcqSpeedThreshold = 0.4f;
-    private const float boostRemovedPerSec = 10f;
+    private const float boostAcqWhenInThreshold = 20f;   // Boost we get per second we are within threshold
+    private const float boostAcqSpeedThreshold = 0.6f;  // Percentage of speed we have to be below before we start getting boost
+    private const float boostRemovedPerSec = 10f;        // Boost we loose per second when boosting
 
-    
+    public bool isBoosting; // Are we boosting, use this for checking with other classes, not CarController.boostInput, as that is for checking input
 
-    public float boostAcquisition;
-    public float currentTorque;
+    public float boostAcquisition; // Boost we are currently getting per second
+    public float currentTorque; // Torque our engine is currently able to exert to the wheels
 
 
     private void Update()
@@ -53,9 +53,10 @@ public class Engine : MonoBehaviour
         if (boosting && boost > 0)
         {
             t = boostTorque;
+            isBoosting = true;
             return t;
         }
-
+        isBoosting = false;
         t = Mathf.Lerp(standardTorque, minTorque, CarController.instance.speedPerc);
         Debug.Log(t);
         return t;

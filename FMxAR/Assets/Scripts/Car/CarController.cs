@@ -31,12 +31,12 @@ public class CarController : MonoBehaviour
     // Singleton
     public static CarController instance;
 
-    private Engine _engine;
     private Rigidbody _rb;
 
+    public Engine engine;
 
-    public AudioSource _engineAudioSrc;
-    public AudioSource _boostAudioSrc;
+    public AudioSource engineAudioSrc;
+    public AudioSource boostAudioSrc;
 
     [SerializeField] private float minPitch;
     [SerializeField] private float maxPitch;
@@ -85,7 +85,7 @@ public class CarController : MonoBehaviour
         _carGrounded =  GetGroundedStatus();
 
         // Remove Boost if we are boosting
-        _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
+        engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
 
         // Set speedPerc to a percentage between 0 and 1, based on speed
         speedPerc = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude);
@@ -96,7 +96,7 @@ public class CarController : MonoBehaviour
     private void HandleFX()
     {
         float camVel = 0;
-        if (speedPerc > 0.85f && boostInput)
+        if (speedPerc > 0.85f && engine.isBoosting)
         {
             Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, 75f, ref camVel, fovSmooth * Time.deltaTime);
             foreach (TrailRenderer trail in trails)
@@ -123,22 +123,22 @@ public class CarController : MonoBehaviour
         if (throttleInput > 0 || reverseInput > 0)
         {
             float target = Mathf.Lerp(minPitch, maxPitch, speedPerc);
-            _engineAudioSrc.pitch = Mathf.SmoothDamp(_engineAudioSrc.pitch, target, ref vel, (pitchReturn * Time.deltaTime) * 10);
+            engineAudioSrc.pitch = Mathf.SmoothDamp(engineAudioSrc.pitch, target, ref vel, (pitchReturn * Time.deltaTime) * 10);
         }
         else
         {
-            _engineAudioSrc.pitch -= pitchReturn * Time.deltaTime;
+            engineAudioSrc.pitch -= pitchReturn * Time.deltaTime;
         }
 
-        _engineAudioSrc.pitch = Mathf.Clamp(_engineAudioSrc.pitch, minPitch, maxPitch);
+        engineAudioSrc.pitch = Mathf.Clamp(engineAudioSrc.pitch, minPitch, maxPitch);
 
-        if (boostInput && _engine.GetBoostAmount() > 0 && !_boostAudioSrc.isPlaying)
+        if (boostInput && engine.GetBoostAmount() > 0 && !boostAudioSrc.isPlaying)
         {
-            _boostAudioSrc.PlayOneShot(_boostAudioSrc.clip);
+            boostAudioSrc.PlayOneShot(boostAudioSrc.clip);
         }
         else if(!boostInput)
         {
-            _boostAudioSrc.Stop();
+            boostAudioSrc.Stop();
         }
     }
 
@@ -174,7 +174,7 @@ public class CarController : MonoBehaviour
             {
                 foreach (Wheel wheel in info.wheels)
                 {
-                    wheel.GetWheelCollider().motorTorque = _engine.currentTorque * throttleInput;
+                    wheel.GetWheelCollider().motorTorque = engine.currentTorque * throttleInput;
 
                 }
             }
@@ -197,7 +197,7 @@ public class CarController : MonoBehaviour
     private void InitializeCar()
     {
         _rb = GetComponent<Rigidbody>();
-        _engine = GetComponent<Engine>();
+        engine = GetComponent<Engine>();
         instance = this;
 
         _rb.centerOfMass = _rb.centerOfMass + centerOfMass;
