@@ -82,5 +82,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  forwardMultipier: 4
+  forwardMultipier: 3
   lateralMultiplier: 1.5
