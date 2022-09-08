@@ -12,6 +12,8 @@ public class Wheel : MonoBehaviour
     [SerializeField] private float forwardSlip;
     [SerializeField] private bool isSlipping;
 
+    public ParticleSystem psys;
+
     public GameObject wheelGraphic;
     private WheelCollider wheelCollider;
 
@@ -111,6 +113,8 @@ public class Wheel : MonoBehaviour
         UpdateGraphicPosition();
         UpdateSlipValues();
         isSlipping = IsSlipping();
+        psys.enableEmission = isSlipping;
+        
     }
 
     private void UpdateSlipValues()
