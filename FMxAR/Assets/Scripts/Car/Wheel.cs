@@ -12,10 +12,14 @@ public class Wheel : MonoBehaviour
     [SerializeField] private float forwardSlip;
     [SerializeField] private bool isSlipping;
 
+
+    
     public ParticleSystem psys;
+    
 
     public GameObject wheelGraphic;
     private WheelCollider wheelCollider;
+    private AudioSource _audioSrc;
 
     // ScriptableObject that hold a wheel configuration we can build from
     public WheelProperties wheelProperties;
@@ -105,6 +109,7 @@ public class Wheel : MonoBehaviour
 
     private void Start()
     {
+        _audioSrc = GetComponent<AudioSource>();
         InitWheelCollider();
     }
 
@@ -113,6 +118,8 @@ public class Wheel : MonoBehaviour
         UpdateGraphicPosition();
         UpdateSlipValues();
         isSlipping = IsSlipping();
+        // Audio Volume of the slipping sound is high if were slipping, otherwise low but scales up with speed
+        _audioSrc.volume = IsSlipping() ? lateralSlip + forwardSlip : CarController.instance.speedPerc / 4;
         psys.enableEmission = isSlipping;
         
     }

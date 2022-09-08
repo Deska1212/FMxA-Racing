@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,13 +14,34 @@ public class Engine : MonoBehaviour
     [SerializeField]
     private float boost;
 
+    private const float boostAcqWhenInThreshold = 20f;
+    private const float boostAcqSpeedThreshold = 0.4f;
+    private const float boostRemovedPerSec = 10f;
+
+    
+
+    public float boostAcquisition;
     public float currentTorque;
 
-    public float boostRemovedPerSec;
 
     private void Update()
     {
         currentTorque = GetTorque(CarController.instance.boostInput);
+        HandleBoostAcquisition();
+        boost = Mathf.Clamp(boost, 0, 100f);
+    }
+
+    private void HandleBoostAcquisition()
+    {
+        if (!CarController.instance.boostInput && CarController.instance.speedPerc < boostAcqSpeedThreshold)
+        {
+            boostAcquisition = boostAcqWhenInThreshold * Time.deltaTime;
+        }
+        else
+        {
+            boostAcquisition = 0;
+        }
+        boost += boostAcquisition;
     }
 
 

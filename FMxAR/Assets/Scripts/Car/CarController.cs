@@ -42,8 +42,12 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxPitch;
     [SerializeField] private float pitchReturn;
 
+    public float fovSmooth;
+
 
     public List<AxleInfo> axleInfos = new List<AxleInfo>();
+    public TrailRenderer[] trails;
+    public ParticleSystem speedLines;
 
 
     public float horizontalInput;
@@ -77,6 +81,7 @@ public class CarController : MonoBehaviour
         HandleDownForce();
         HandleSteeringDamp();
         HandleEngineSound();
+        HandleFX();
         _carGrounded =  GetGroundedStatus();
 
         // Remove Boost if we are boosting
@@ -86,6 +91,30 @@ public class CarController : MonoBehaviour
         speedPerc = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude);
         
         _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
+    }
+
+    private void HandleFX()
+    {
+        float camVel = 0;
+        if (speedPerc > 0.85f && boostInput)
+        {
+            Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, 75f, ref camVel, fovSmooth * Time.deltaTime);
+            foreach (TrailRenderer trail in trails)
+            {
+                trail.emitting = true;
+            }
+            speedLines.enableEmission = true;
+        }
+        else
+        {
+            Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, 60f, ref camVel, fovSmooth * Time.deltaTime);
+            foreach (TrailRenderer trail in trails)
+            {
+                trail.emitting = false;
+            }
+            speedLines.enableEmission = false;
+
+        }
     }
 
     private void HandleEngineSound()
@@ -103,9 +132,9 @@ public class CarController : MonoBehaviour
 
         _engineAudioSrc.pitch = Mathf.Clamp(_engineAudioSrc.pitch, minPitch, maxPitch);
 
-        if (boostInput && !_boostAudioSrc.isPlaying)
+        if (boostInput && _engine.GetBoostAmount() > 0 && !_boostAudioSrc.isPlaying)
         {
-            _boostAudioSrc.Play();
+            _boostAudioSrc.PlayOneShot(_boostAudioSrc.clip);
         }
         else if(!boostInput)
         {
