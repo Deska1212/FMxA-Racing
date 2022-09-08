@@ -12,12 +12,13 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private bool _canInput;
     [SerializeField] private bool _carGrounded;
-    private Engine _engine;
-    private Rigidbody _rb;
+    [SerializeField] private float _downforce;
     [SerializeField] private float _steeringAngle;
     [SerializeField] private float _steeringDamp;
-    [SerializeField] private float _downforce;
-    private const float _minSteeringDamp = 0.5f;
+    [SerializeField] private float _dampStart;
+    [SerializeField] private float _dampMin;
+
+    [SerializeField] private float _speedPerc; // Percentage of max speed between 0 and 1, correlating to 
 
     public Vector3 centerOfMass;
     public float maxSteeringAngle;
@@ -25,8 +26,12 @@ public class CarController : MonoBehaviour
     public float maxSpeed;
     public float brakeTorque;
 
+
     // Singleton
     public static CarController instance;
+
+    private Engine _engine;
+    private Rigidbody _rb;
 
 
     public List<AxleInfo> axleInfos = new List<AxleInfo>();
@@ -37,6 +42,8 @@ public class CarController : MonoBehaviour
     public float reverseInput;
     public float throttleInput;
     public bool boostInput;
+
+    public float v;
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +58,7 @@ public class CarController : MonoBehaviour
     {
         #if UNITY_EDITOR
             HandlePCInputs();
-#endif
+        #endif
 
         
 
@@ -59,14 +66,23 @@ public class CarController : MonoBehaviour
 
         UpdateAxles();
         HandleDownForce();
+        HandleSteeringDamp();
         _carGrounded =  GetGroundedStatus();
 
         // Remove Boost if we are boosting
         _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
 
-        // Clamp steeringDamp
-        _steeringDamp = Mathf.Clamp(_steeringDamp, _minSteeringDamp, 1f);
+        // Set speedPerc to a percentage between 0 and 1, based on speed
+        _speedPerc = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude);
+        
         _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
+    }
+
+    private void HandleSteeringDamp()
+    {
+        _steeringDamp = Mathf.InverseLerp(1, _dampStart, _speedPerc);
+        // Clamp steeringDamp
+        _steeringDamp = Mathf.Clamp(_steeringDamp, _dampMin, 1f);
     }
 
     private void HandlePCInputs()
@@ -109,7 +125,7 @@ public class CarController : MonoBehaviour
     private void HandleDownForce()
     {
         // Calculate downforce based on speed
-        _downforce = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude) * maxDownforce;
+        _downforce = _speedPerc * maxDownforce;
         _rb.AddForce(Vector3.down * _downforce);
     }
 

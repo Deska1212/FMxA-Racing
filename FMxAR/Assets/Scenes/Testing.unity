@@ -208,13 +208,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canInput: 0
   _carGrounded: 0
+  _downforce: 0
   _steeringAngle: 0
   _steeringDamp: 1
-  _downforce: 0
+  _dampStart: 0.5
+  _dampMin: 0.1
+  _speedPerc: 0
   centerOfMass: {x: 0, y: 0, z: 0}
   maxSteeringAngle: 25
   maxDownforce: 2000
-  maxSpeed: 27.8
+  maxSpeed: 13.9
   brakeTorque: 600
   axleInfos:
   - name: Front Axle
@@ -234,6 +237,7 @@ MonoBehaviour:
   reverseInput: 0
   throttleInput: 0
   boostInput: 0
+  v: 0
 --- !u!1 &44358580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,8 +1102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1346991472}
   offset: {x: 0, y: 1.5, z: -5}
+  height: 0
   positionSmooth: 7.5
-  rotationSmooth: 5
 --- !u!1 &1134299868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,7 +1777,7 @@ Transform:
   m_GameObject: {fileID: 1750478872}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalScale: {x: 5000, y: 1, z: 5000}
   m_Children: []
   m_Father: {fileID: 2142013729}
   m_RootOrder: 0
