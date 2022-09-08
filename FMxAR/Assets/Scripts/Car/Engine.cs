@@ -7,25 +7,36 @@ public class Engine : MonoBehaviour
     [SerializeField]
     private float standardTorque;
     [SerializeField]
+    private float minTorque;
+    [SerializeField]
     private float boostTorque;
     [SerializeField]
     private float boost;
 
+    public float currentTorque;
+
     public float boostRemovedPerSec;
 
+    private void Update()
+    {
+        currentTorque = GetTorque(CarController.instance.boostInput);
+    }
 
-    
 
 
     /// <returns>Current Engine torque based on input</returns>
     public float GetTorque(bool boosting)
     {
+        float t;
         if (boosting && boost > 0)
         {
-            return boostTorque;
+            t = boostTorque;
+            return t;
         }
-        
-        return standardTorque;
+
+        t = Mathf.Lerp(standardTorque, minTorque, CarController.instance.speedPerc);
+        Debug.Log(t);
+        return t;
     }
 
 

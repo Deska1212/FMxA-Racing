@@ -18,11 +18,12 @@ public class CarController : MonoBehaviour
     [SerializeField] private float _dampStart;
     [SerializeField] private float _dampMin;
 
-    [SerializeField] private float _speedPerc; // Percentage of max speed between 0 and 1, correlating to 
 
     public Vector3 centerOfMass;
+    public float speedPerc; // Percentage of max speed between 0 and 1, correlating to 
     public float maxSteeringAngle;
     public float maxDownforce; // This is downforce at maxSpeed
+    public float minDownforce; // This is always applied
     public float maxSpeed;
     public float brakeTorque;
 
@@ -32,6 +33,14 @@ public class CarController : MonoBehaviour
 
     private Engine _engine;
     private Rigidbody _rb;
+
+
+    public AudioSource _engineAudioSrc;
+    public AudioSource _boostAudioSrc;
+
+    [SerializeField] private float minPitch;
+    [SerializeField] private float maxPitch;
+    [SerializeField] private float pitchReturn;
 
 
     public List<AxleInfo> axleInfos = new List<AxleInfo>();
@@ -67,20 +76,46 @@ public class CarController : MonoBehaviour
         UpdateAxles();
         HandleDownForce();
         HandleSteeringDamp();
+        HandleEngineSound();
         _carGrounded =  GetGroundedStatus();
 
         // Remove Boost if we are boosting
         _engine.RemoveBoost(boostInput ? throttleInput * Time.deltaTime : 0);
 
         // Set speedPerc to a percentage between 0 and 1, based on speed
-        _speedPerc = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude);
+        speedPerc = Mathf.InverseLerp(0, maxSpeed, _rb.velocity.magnitude);
         
         _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
     }
 
+    private void HandleEngineSound()
+    {
+        float vel = 0;
+        if (throttleInput > 0 || reverseInput > 0)
+        {
+            float target = Mathf.Lerp(minPitch, maxPitch, speedPerc);
+            _engineAudioSrc.pitch = Mathf.SmoothDamp(_engineAudioSrc.pitch, target, ref vel, (pitchReturn * Time.deltaTime) * 10);
+        }
+        else
+        {
+            _engineAudioSrc.pitch -= pitchReturn * Time.deltaTime;
+        }
+
+        _engineAudioSrc.pitch = Mathf.Clamp(_engineAudioSrc.pitch, minPitch, maxPitch);
+
+        if (boostInput && !_boostAudioSrc.isPlaying)
+        {
+            _boostAudioSrc.Play();
+        }
+        else if(!boostInput)
+        {
+            _boostAudioSrc.Stop();
+        }
+    }
+
     private void HandleSteeringDamp()
     {
-        _steeringDamp = Mathf.InverseLerp(1, _dampStart, _speedPerc);
+        _steeringDamp = Mathf.InverseLerp(1, _dampStart, speedPerc);
         // Clamp steeringDamp
         _steeringDamp = Mathf.Clamp(_steeringDamp, _dampMin, 1f);
     }
@@ -110,7 +145,7 @@ public class CarController : MonoBehaviour
             {
                 foreach (Wheel wheel in info.wheels)
                 {
-                    wheel.GetWheelCollider().motorTorque = _engine.GetTorque(boostInput) * throttleInput;
+                    wheel.GetWheelCollider().motorTorque = _engine.currentTorque * throttleInput;
 
                 }
             }
@@ -125,7 +160,8 @@ public class CarController : MonoBehaviour
     private void HandleDownForce()
     {
         // Calculate downforce based on speed
-        _downforce = _speedPerc * maxDownforce;
+        _downforce = speedPerc * maxDownforce;
+        _downforce = Mathf.Clamp(_downforce, minDownforce, maxDownforce);
         _rb.AddForce(Vector3.down * _downforce);
     }
 
@@ -133,8 +169,9 @@ public class CarController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _engine = GetComponent<Engine>();
+        instance = this;
 
-        _rb.centerOfMass = centerOfMass;
+        _rb.centerOfMass = _rb.centerOfMass + centerOfMass;
     }
 
     private bool GetGroundedStatus()
