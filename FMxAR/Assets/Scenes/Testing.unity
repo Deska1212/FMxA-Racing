@@ -212,7 +212,7 @@ MonoBehaviour:
   _steeringAngle: 0
   _steeringDamp: 1
   _dampStart: 0.5
-  _dampMin: 0.1
+  _dampMin: 0.15
   _speedPerc: 0
   centerOfMass: {x: 0, y: 0, z: 0}
   maxSteeringAngle: 25
@@ -441,6 +441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Front Right
+  lateralSlip: 0
+  forwardSlip: 0
   wheelGraphic: {fileID: 835503355}
   wheelProperties: {fileID: 11400000, guid: 9dd5df94298259f4caf8aeb0bb15be8c, type: 2}
 --- !u!1 &496401123
@@ -862,6 +864,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Front Left
+  lateralSlip: 0
+  forwardSlip: 0
   wheelGraphic: {fileID: 496401123}
   wheelProperties: {fileID: 11400000, guid: 9dd5df94298259f4caf8aeb0bb15be8c, type: 2}
 --- !u!1 &835503355
@@ -1002,6 +1006,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Back Left
+  lateralSlip: 0
+  forwardSlip: 0
   wheelGraphic: {fileID: 1441698433}
   wheelProperties: {fileID: 11400000, guid: 9dd5df94298259f4caf8aeb0bb15be8c, type: 2}
 --- !u!1 &963194225
@@ -2020,6 +2026,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Back Right
+  lateralSlip: 0
+  forwardSlip: 0
   wheelGraphic: {fileID: 798201061}
   wheelProperties: {fileID: 11400000, guid: 9dd5df94298259f4caf8aeb0bb15be8c, type: 2}
 --- !u!1 &2142013728

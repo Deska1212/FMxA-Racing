@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,8 @@ using UnityEngine;
 public class Wheel : MonoBehaviour
 {
     public string name;
-    private float lateralSlip;
-    private float forwardSlip;
+    [SerializeField] private float lateralSlip;
+    [SerializeField] private float forwardSlip;
     private bool isSlipping;
 
     public GameObject wheelGraphic;
@@ -107,6 +108,13 @@ public class Wheel : MonoBehaviour
     private void Update()
     {
         UpdateGraphicPosition();
+        UpdateSlipValues();
+    }
+
+    private void UpdateSlipValues()
+    {
+        forwardSlip = Mathf.Abs(GetWheelHit().forwardSlip);
+        lateralSlip = Mathf.Abs(GetWheelHit().sidewaysSlip);
     }
 
     private void UpdateGraphicPosition()
@@ -116,5 +124,27 @@ public class Wheel : MonoBehaviour
         wheelCollider.GetWorldPose(out position, out rotation);
         wheelGraphic.transform.position = position;
         wheelGraphic.transform.rotation = rotation;
+    }
+
+    public WheelHit GetWheelHit()
+    {
+        WheelHit hit;
+        bool verify = wheelCollider.GetGroundHit(out hit);
+        if (verify)
+        { 
+            return hit;
+        }
+        return new WheelHit();
+    }
+
+    public void OnDrawGizmos()
+    {
+        Color colour = Color.Lerp(Color.green, Color.red, forwardSlip);
+        Gizmos.color = colour;
+        Gizmos.DrawSphere(transform.position + (transform.forward * 0.35f), 0.25f);
+
+        Color cubeColour = Color.Lerp(Color.green, Color.red, lateralSlip);
+        Gizmos.color = cubeColour;
+        Gizmos.DrawCube(transform.position, new Vector3(0.25f, 0.25f, 0.25f));
     }
 }
