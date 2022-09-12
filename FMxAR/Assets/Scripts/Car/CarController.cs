@@ -61,6 +61,7 @@ public class CarController : MonoBehaviour
     [Header("Visual FX")]
     public TrailRenderer[] trails; // Speed trails active when boosting and above threshold
     public ParticleSystem speedLines; // "Wind" lines when traveling fast
+    public ParticleSystem boostExhaust; // Exhaust from the car when boosting
     public float nominalFov; // Standard FOV for the camera when not movng
     public float movingFov; // FOV when travelling normally.
     public float boostFov; // FOV when travelling fast
@@ -168,6 +169,9 @@ public class CarController : MonoBehaviour
             }
             speedLines.enableEmission = false;
         }
+
+        boostExhaust.enableEmission = engine.isBoosting;
+
         Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, desiredFov, ref camVel, fovDamp * Time.deltaTime);
     }
 
