@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47366162304fd494aa04b26588cbb2d4, type: 3}
-  m_Name: BackWheelProps
+  m_Name: FrontWheelProps
   m_EditorClassIdentifier: 
   dampingRate: 0.5
   springyness: 35000
@@ -82,5 +82,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  forwardMultipier: 3
-  lateralMultiplier: 1.5
+  forwardMultipier: 6
+  lateralMultiplier: 3

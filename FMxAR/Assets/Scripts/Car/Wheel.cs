@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +11,7 @@ public class Wheel : MonoBehaviour
     [SerializeField] private float forwardSlip;
     [SerializeField] private bool isSlipping;
 
-
+    private const float SLIPPING_THRESHOLD = 0.5f; // Value this wheel has to cross to be classed as slipping. Note that 0 is no slip, 1 is full slip
     
     public ParticleSystem psys;
     
@@ -20,9 +19,12 @@ public class Wheel : MonoBehaviour
     public GameObject wheelGraphic;
     private WheelCollider wheelCollider;
     private AudioSource _audioSrc;
+    public float pitchVariation;
+    private float _startingPitch;
 
     // ScriptableObject that hold a wheel configuration we can build from
     public WheelProperties wheelProperties;
+    public float baseWheelSoundModifier; // This modifier determines how loud the wheels are when traversing the ground, not slipping.
     
 
 
@@ -110,6 +112,7 @@ public class Wheel : MonoBehaviour
     private void Start()
     {
         _audioSrc = GetComponent<AudioSource>();
+        _startingPitch = _audioSrc.pitch;
         InitWheelCollider();
     }
 
@@ -117,11 +120,31 @@ public class Wheel : MonoBehaviour
     {
         UpdateGraphicPosition();
         UpdateSlipValues();
+        _audioSrc.pitch = RandomisePitch();
         isSlipping = IsSlipping();
         // Audio Volume of the slipping sound is high if were slipping, otherwise low but scales up with speed
-        _audioSrc.volume = IsSlipping() ? lateralSlip + forwardSlip : CarController.instance.speedPerc / 4;
+        _audioSrc.volume = isSlipping ? Mathf.Max(lateralSlip, forwardSlip) : (CarController.instance.speedPerc / 5) * baseWheelSoundModifier;
         psys.enableEmission = isSlipping;
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("Lost Grip");
+            wheelCollider.forwardFriction = ModifyFrictionMultiplier(wheelCollider.forwardFriction, 0.4f);
+            wheelCollider.sidewaysFriction = ModifyFrictionMultiplier(wheelCollider.sidewaysFriction, 0.1f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            Debug.Log("Reset Grip");
+            InitWheelCollider(); // Oh boy this is ugly
+        }
         
+    }
+
+    private float RandomisePitch()
+    {
+        float rand = Random.Range(-pitchVariation, pitchVariation);
+        return _startingPitch + rand;
     }
 
     private void UpdateSlipValues()
@@ -163,6 +186,19 @@ public class Wheel : MonoBehaviour
 
     public bool IsSlipping()
     {
-        return lateralSlip > 0.6 || forwardSlip > 0.6;
+        return lateralSlip > SLIPPING_THRESHOLD || forwardSlip > SLIPPING_THRESHOLD;
     }
+
+    public WheelFrictionCurve ModifyFrictionMultiplier(WheelFrictionCurve curveToModify, float multiplier)
+    {
+        // Pass in the curve you want to modify
+        // Returns the modifier curve
+        // Reset that curve by passing it into ResetFrictionMultiplier
+        WheelFrictionCurve modifiedCurve = curveToModify; // ps-b-ref
+        modifiedCurve.stiffness *= multiplier;
+        return modifiedCurve;
+        
+    }
+
+    
 }
