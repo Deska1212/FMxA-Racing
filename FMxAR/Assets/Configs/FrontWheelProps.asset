@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FrontWheelProps
   m_EditorClassIdentifier: 
   dampingRate: 0.5
-  springyness: 35000
-  damp: 4500
+  springyness: 30000
+  damp: 2500
   targetPos: 0.5
   forwardCurve:
     serializedVersion: 2

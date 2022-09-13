@@ -58,7 +58,6 @@ public class Engine : MonoBehaviour
         }
         isBoosting = false;
         t = Mathf.Lerp(standardTorque, minTorque, CarController.instance.speedPerc);
-        Debug.Log(t);
         return t;
     }
 

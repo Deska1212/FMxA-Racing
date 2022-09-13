@@ -25,7 +25,10 @@ public class Wheel : MonoBehaviour
     // ScriptableObject that hold a wheel configuration we can build from
     public WheelProperties wheelProperties;
     public float baseWheelSoundModifier; // This modifier determines how loud the wheels are when traversing the ground, not slipping.
-    
+
+    public bool goodTerrain;
+    public float baseDampingRate; // The standard damping value each wheel collider starts with
+    public float badTerrainDampingRate; // The damping value this wheel has on bad terrain, causes the wheel to be less powerful
 
 
     public bool WheelGrounded
@@ -121,23 +124,14 @@ public class Wheel : MonoBehaviour
         UpdateGraphicPosition();
         UpdateSlipValues();
         _audioSrc.pitch = RandomisePitch();
+        goodTerrain = GoodTerrainCheck();
         isSlipping = IsSlipping();
         // Audio Volume of the slipping sound is high if were slipping, otherwise low but scales up with speed
         _audioSrc.volume = isSlipping ? Mathf.Max(lateralSlip, forwardSlip) : (CarController.instance.speedPerc / 5) * baseWheelSoundModifier;
         psys.enableEmission = isSlipping;
 
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("Lost Grip");
-            wheelCollider.forwardFriction = ModifyFrictionMultiplier(wheelCollider.forwardFriction, 0.4f);
-            wheelCollider.sidewaysFriction = ModifyFrictionMultiplier(wheelCollider.sidewaysFriction, 0.1f);
-        }
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("Reset Grip");
-            InitWheelCollider(); // Oh boy this is ugly
-        }
+        GetWheelCollider().wheelDampingRate = goodTerrain ? baseDampingRate : badTerrainDampingRate;
         
     }
 
@@ -173,17 +167,6 @@ public class Wheel : MonoBehaviour
         return new WheelHit();
     }
 
-    public void OnDrawGizmos()
-    {
-        Color colour = Color.Lerp(Color.green, Color.red, forwardSlip);
-        Gizmos.color = colour;
-        Gizmos.DrawSphere(transform.position + (transform.forward * 0.35f), 0.25f);
-
-        Color cubeColour = Color.Lerp(Color.green, Color.red, lateralSlip);
-        Gizmos.color = cubeColour;
-        Gizmos.DrawCube(transform.position, new Vector3(0.25f, 0.25f, 0.25f));
-    }
-
     public bool IsSlipping()
     {
         return lateralSlip > SLIPPING_THRESHOLD || forwardSlip > SLIPPING_THRESHOLD;
@@ -200,5 +183,23 @@ public class Wheel : MonoBehaviour
         
     }
 
-    
+    private bool GoodTerrainCheck()
+    {
+        if (WheelGrounded)
+        { 
+            return GetWheelHit().collider.tag == "Track";
+        }
+        return true;
+    }
+
+    public void OnDrawGizmos()
+    {
+        Color colour = Color.Lerp(Color.green, Color.red, forwardSlip);
+        Gizmos.color = colour;
+        Gizmos.DrawSphere(transform.position + (transform.forward * 0.35f), 0.25f);
+
+        Color cubeColour = Color.Lerp(Color.green, Color.red, lateralSlip);
+        Gizmos.color = cubeColour;
+        Gizmos.DrawCube(transform.position, new Vector3(0.25f, 0.25f, 0.25f));
+    }
 }

@@ -9,7 +9,8 @@ using UnityEngine;
 /// </summary>
 public class CarController : MonoBehaviour
 {
-    [SerializeField] private bool _userInput; // Is user input enabled
+    public bool userInput; // Is user input enabled
+
     [SerializeField] private bool _carGrounded; // Are all 4 wheels grounded
 
     [Space(5)]
@@ -274,6 +275,14 @@ public class CarController : MonoBehaviour
             }
         }
         return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "LevelEnd")
+        {
+            TimeTrialLevel.instance.FinishLevel();
+        }
     }
 
 }
