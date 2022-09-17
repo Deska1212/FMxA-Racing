@@ -27,8 +27,8 @@ public class MainMenu : MonoBehaviour
 
     private void DisplayBestTimer()
     {
-        trackOneBestTime.text = TimeTrialManager.instance.levelDatas[0].bestTime.ToString("F2");
-        trackTwoBestTime.text = TimeTrialManager.instance.levelDatas[1].bestTime.ToString("F2");
-        trackThreeBestTime.text = TimeTrialManager.instance.levelDatas[2].bestTime.ToString("F2");
+        trackOneBestTime.text = TimeTrialManager.instance.levelDatas[0].bestTime.ToString("F2") + "s";
+        trackTwoBestTime.text = TimeTrialManager.instance.levelDatas[1].bestTime.ToString("F2") + "s";
+        trackThreeBestTime.text = TimeTrialManager.instance.levelDatas[2].bestTime.ToString("F2") + "s";
     }
 }
