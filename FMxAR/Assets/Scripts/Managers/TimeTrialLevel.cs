@@ -26,6 +26,7 @@ public class TimeTrialLevel : MonoBehaviour
         instance = this;
         bool fail = RetrieveLevelData();
         levelData.currentTime = 0f;
+
         StartCoroutine(LevelStartRoutine());    
     }
 
@@ -47,7 +48,10 @@ public class TimeTrialLevel : MonoBehaviour
             }
         }
 
-        if (startingCountdown == false)
+
+        // NOTE: This would be a great candidate for using some sort of state machine, even just a simple enumerator that tracks race state ( E.g. Counting down, finshed, underway)
+        // Didn't have the time to refactor. MAKE SURE YOU DETAIL THIS IN DOCUMENTATION AS TECHNICAL FEEDBACK
+        if (startingCountdown == false && levelFinished == false)
         { 
             levelData.currentTime += Time.deltaTime;
         }
@@ -58,6 +62,9 @@ public class TimeTrialLevel : MonoBehaviour
         Debug.Log("Level Finished with a time of " + levelData.currentTime);
         levelFinished = true;
         CarController.instance.userInput = false;
+
+        // Activate finished level text
+        GameUIController.instance.ActivateWinText();
 
         float finishTime = levelData.currentTime;
 
@@ -93,7 +100,7 @@ public class TimeTrialLevel : MonoBehaviour
     public IEnumerator LevelStartRoutine()
     {
         // Countdown
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         // Enable input
         CarController.instance.userInput = true;
@@ -105,9 +112,10 @@ public class TimeTrialLevel : MonoBehaviour
     public IEnumerator ReturnToMenuRoutine()
     {
         // Countdown
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1.25f);
 
         // Return us to the main menu
+        GetComponent<LevelManager>().LoadLevel(1); // Main menu is index 1;
     }
 
     public bool RetrieveLevelData()

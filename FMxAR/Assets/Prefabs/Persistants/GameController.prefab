@@ -46,6 +46,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1125a4c15886a854585430e06417ed8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelDatas:
+  - bestTime: 0
+    currentTime: 0
+    trackIndex: 0
+  - bestTime: 0
+    currentTime: 0
+    trackIndex: 1
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 2
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 3
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 4
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 5
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 6
+  - bestTime: 9999
+    currentTime: 0
+    trackIndex: 7
 --- !u!114 &1729576139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,7 +111,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 96a2b769907c26847ac341fc26271827, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
