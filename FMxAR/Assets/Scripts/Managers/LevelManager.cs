@@ -21,4 +21,13 @@ public class LevelManager : MonoBehaviour
     { 
         SceneManager.LoadScene(index);
     }
+
+    /// <summary>
+    /// Resets the current scene.
+    /// </summary>
+    public void ResetLevel()
+    {
+        Debug.Log("Level Reset");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

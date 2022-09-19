@@ -49,6 +49,13 @@ public class TimeTrialLevel : MonoBehaviour
         }
 
 
+        // Check for level reset input (R)
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetTimeTrialLevel();
+        }
+
+
         // NOTE: This would be a great candidate for using some sort of state machine, even just a simple enumerator that tracks race state ( E.g. Counting down, finshed, underway)
         // Didn't have the time to refactor. MAKE SURE YOU DETAIL THIS IN DOCUMENTATION AS TECHNICAL FEEDBACK
         if (startingCountdown == false && levelFinished == false)
@@ -126,6 +133,26 @@ public class TimeTrialLevel : MonoBehaviour
         }
         levelData = TimeTrialManager.instance.levelDatas[levelIndex];
         return true;
+    }
+
+    /// <summary>
+    /// Resets the current level when the 'R' key is pressed
+    /// </summary>
+    private void ResetTimeTrialLevel()
+    {
+        // Check if we can reset, we have to be after the countdown
+        if (startingCountdown)
+        {
+            // Don't do anything if we try to reset during the countdown
+            return;
+        }
+
+        // Reset time scale just in case we reset at the finish line
+        Time.timeScale = 1f;
+
+        // Call level manager to reset the current scene.
+
+        GetComponent<LevelManager>().ResetLevel();
     }
 
 }
