@@ -20,13 +20,16 @@ public class TimeTrialLevel : MonoBehaviour
 
     public float countdownTimer;
     public TextMeshProUGUI countdownTimerText;
+    public TextMeshProUGUI resetLevelGuideText;
 
     private void Start()
     {
         instance = this;
         bool fail = RetrieveLevelData();
         levelData.currentTime = 0f;
-
+        LeanTween.scale(resetLevelGuideText.gameObject, Vector3.zero, 0.75f).setDelay(3f).setEaseInBack(); // Scale the reset guide text down to 0, taking 0.75f seconds, with a 3 second delay
+        
+        
         StartCoroutine(LevelStartRoutine());    
     }
 
@@ -44,7 +47,7 @@ public class TimeTrialLevel : MonoBehaviour
             // Start lerping out the alpha
             if (!LeanTween.isTweening())
             { 
-                LeanTween.scale(countdownTimerText.gameObject, Vector3.zero, 1f).setEase(LeanTweenType.easeInBack);
+                LeanTween.scale(countdownTimerText.gameObject, Vector3.zero, 0.75f).setEase(LeanTweenType.easeInBack);
             }
         }
 

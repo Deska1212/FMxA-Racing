@@ -29,9 +29,9 @@ public class CrossPlatformInputController : MonoBehaviour
 
     public TextMeshProUGUI switchInputsText;
 
-    public Button boostButton;
-    public Button throttleButton;
-    public Button brakeButton;
+    private Button boostButton;
+    private Button throttleButton;
+    private Button brakeButton;
 
 
     // Start is called before the first frame update

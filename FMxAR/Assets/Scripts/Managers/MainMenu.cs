@@ -31,4 +31,10 @@ public class MainMenu : MonoBehaviour
         trackTwoBestTime.text = TimeTrialManager.instance.levelDatas[1].bestTime.ToString("F2") + "s";
         trackThreeBestTime.text = TimeTrialManager.instance.levelDatas[2].bestTime.ToString("F2") + "s";
     }
+
+    public void ExitGame()
+    {
+        Debug.Log("Quitting Game");
+        Application.Quit();
+    }
 }
