@@ -49,6 +49,9 @@ public class CarController : MonoBehaviour
     [Header("Audio FX")]
     public AudioSource engineAudioSrc; // Responsible for playing pitch shifting engine sound
     public AudioSource boostAudioSrc; // Only plays when we are boosting
+    public AudioSource hitAudioSrc; // Plays when the car hits something
+
+    public float hitSrcDefaultPitch; // Keep track of default pitch
 
     [Space(3)]
     [SerializeField] public float minPitch; // Min pitch engine audio will go to - Idle pitch
@@ -282,6 +285,15 @@ public class CarController : MonoBehaviour
         if (other.gameObject.tag == "LevelEnd")
         {
             TimeTrialLevel.instance.FinishLevel();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.isStatic)
+        {
+            hitAudioSrc.pitch = hitSrcDefaultPitch + UnityEngine.Random.Range(-0.2f, 0.2f);
+            hitAudioSrc.Play();
         }
     }
 

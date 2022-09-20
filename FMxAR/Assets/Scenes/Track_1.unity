@@ -286,14 +286,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5877817792396650488, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: m_CastShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5877817792396650488, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -312,19 +304,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.93751246
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.34795183
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -332,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -40.724
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8232282456846650720, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -346,9 +338,17 @@ PrefabInstance:
       propertyPath: speedLines
       value: 
       objectReference: {fileID: 912565208}
-    - target: {fileID: 8858328120176506038, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
+    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
+      propertyPath: boostTorque
+      value: 2800
+      objectReference: {fileID: 0}
+    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
+      propertyPath: boostRemovedPerSec
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
+      propertyPath: boostAcqSpeedThreshold
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}

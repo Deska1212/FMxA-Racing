@@ -186,8 +186,12 @@ public class Wheel : MonoBehaviour
     private bool GoodTerrainCheck()
     {
         if (WheelGrounded)
-        { 
+        {
             return GetWheelHit().collider.tag == "Track";
+        }
+        else
+        {
+            return false;
         }
         return true;
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47366162304fd494aa04b26588cbb2d4, type: 3}
   m_Name: FrontWheelProps
   m_EditorClassIdentifier: 
-  dampingRate: 0.5
+  dampingRate: 1
   springyness: 30000
   damp: 2500
   targetPos: 0.5
@@ -83,4 +83,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   forwardMultipier: 6
-  lateralMultiplier: 3
+  lateralMultiplier: 3.25
