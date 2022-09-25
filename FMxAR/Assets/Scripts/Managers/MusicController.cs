@@ -15,6 +15,7 @@ public class MusicController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Play the intro sequence to the games music
         musicSrc.PlayOneShot(intro);
         introTrackComplete = true;
     }
@@ -22,6 +23,7 @@ public class MusicController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Loop the loopable section
         if (!musicSrc.isPlaying)
         {
             musicSrc.PlayOneShot(loop);

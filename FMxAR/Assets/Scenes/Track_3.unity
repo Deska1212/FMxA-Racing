@@ -4725,6 +4725,14 @@ PrefabInstance:
       propertyPath: speedLines
       value: 
       objectReference: {fileID: 1921741130}
+    - target: {fileID: 2270290897244548793, guid: 45b5424594b5d8c448ebddb71c26a4d1, type: 3}
+      propertyPath: boostTorque
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2270290897244548793, guid: 45b5424594b5d8c448ebddb71c26a4d1, type: 3}
+      propertyPath: standardTorque
+      value: 2000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45b5424594b5d8c448ebddb71c26a4d1, type: 3}
 --- !u!4 &8232282458199936317 stripped

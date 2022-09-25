@@ -15,11 +15,6 @@ public class TimeTrialManager : MonoBehaviour
         LoadAllBestTimes();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     /// <summary>
     /// Save each of the Level Data's best times using player prefs

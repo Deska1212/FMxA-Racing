@@ -11,9 +11,16 @@ using TMPro;
 /// </summary>
 public class TimeTrialLevel : MonoBehaviour
 {
+    // Singleton
     public static TimeTrialLevel instance;
 
+    /// <summary>
+    /// This levels data structure
+    /// </summary>
     public TimeTrialLevelData levelData;
+    /// <summary>
+    /// This levels build index
+    /// </summary>
     public int levelIndex;
     public bool startingCountdown = true;
     public bool levelFinished;
@@ -66,6 +73,10 @@ public class TimeTrialLevel : MonoBehaviour
             levelData.currentTime += Time.deltaTime;
         }
     }
+
+    /// <summary>
+    /// Starts level finish sequence
+    /// </summary>
     public void FinishLevel()
     {
         // Cache the new data in the TimeTrialManager

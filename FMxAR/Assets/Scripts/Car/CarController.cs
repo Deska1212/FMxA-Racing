@@ -9,32 +9,75 @@ using UnityEngine;
 /// </summary>
 public class CarController : MonoBehaviour
 {
-    public bool userInput; // Is user input enabled
+    /// <summary>
+    /// Is user input enabled
+    /// </summary>
+    public bool userInput;
 
-    [SerializeField] private bool _carGrounded; // Are all 4 wheels grounded
+    /// <summary>
+    /// True if all 4 wheels are grounded
+    /// </summary>
+    [SerializeField] private bool _carGrounded;
 
     [Space(5)]
     [Header("Readouts")]
-    [SerializeField] private float _currentDownforce; // The current downforce exterted on the car
-    [SerializeField] private float _currentSteeringAngle; // The current steering angle of the wheel
-    [SerializeField] private float _currentSteeringDamp; // The current steering damp modifier. Steering damp is at full when its 0, and takes no effect at one (1 - No effect, 0 - Max effect)
+    /// <summary>
+    /// The current downforce exterted on the car
+    /// </summary>
+    [SerializeField] private float _currentDownforce;
+    /// <summary>
+    /// The current steering angle of the wheel
+    /// </summary>
+    [SerializeField] private float _currentSteeringAngle;
+    /// <summary>
+    /// The current steering damp modifier. Steering damp is at full when its 0, and takes no effect at one (1 - No effect, 0 - Max effect)
+    /// </summary>
+    [SerializeField] private float _currentSteeringDamp; 
+    /// <summary>
+    /// Percentage of max speed the car is currently at between 0 and 1
+    /// </summary>
     public float speedPerc; // Percentage of max speed between 0 and 1
 
 
     [Space(5)]
     [Header("Steering properties")]
-    [Range(0, 1)] public float dampStartPerc; // This is the % of maxSpeed the car must be before steering damp takes effect
-    [Range(0, 1)] public float minSteerDamp; // Steering damp @ maxSpeed
-    public float maxSteeringAngle; // Maximum steering angle the vehicles steering capable wheels will turn with no damping effect
+
+    /// <summary>
+    /// The percentage of max speed that must be reached before steering damp starts to come into effect
+    /// </summary>
+    [Range(0, 1)] public float dampStartPerc;
+    /// <summary>
+    /// Steering damp @ max speed
+    /// </summary>
+    [Range(0, 1)] public float minSteerDamp;
+    /// <summary>
+    /// Maximum steering angle the vehicles steering capable wheels will turn with no damping effect
+    /// </summary>
+    public float maxSteeringAngle;
 
 
     [Space(5)]
     [Header("Physical Properties")]
+    /// <summary>
+    /// The vehicles center of mass, set slightly below body center for stability
+    /// </summary>
     public Vector3 centerOfMass;
-    public float maxDownforce; // This is downforce at maxSpeed
-    public float minDownforce; // Downforce clamped here, this is downforce a 0% maxSpeed
-    public float maxSpeed; // Maximum speed of the car in m/s
-    public float brakeTorque; // Brake torque exerted by each wheel when braking
+    /// <summary>
+    /// Downforce at standstill
+    /// </summary>
+    public float minDownforce;
+    /// <summary>
+    /// Downforce at max speed
+    /// </summary>
+    public float maxDownforce;
+    /// <summary>
+    /// Vehicles max speed in m/s
+    /// </summary>
+    public float maxSpeed;
+    /// <summary>
+    /// Brake torque exerted on non-steering wheels when braking.
+    /// </summary>
+    public float brakeTorque;
 
 
     // Singleton
@@ -51,25 +94,36 @@ public class CarController : MonoBehaviour
     public AudioSource boostAudioSrc; // Only plays when we are boosting
     public AudioSource hitAudioSrc; // Plays when the car hits something
 
-    public float hitSrcDefaultPitch; // Keep track of default pitch
+    private float hitSrcDefaultPitch; // Keep track of default pitch
 
     [Space(3)]
-    [SerializeField] public float minPitch; // Min pitch engine audio will go to - Idle pitch
-    [SerializeField] public float maxPitch; // The max pitch the engine audio will go to
-    [SerializeField] public float pitchReturn; // How fast the engines pitch will return to idle
+    ///<summary>Engine pitch at idle</summary>
+    [SerializeField] public float minPitch;
+    /// <summary>Engine pitch at max speed</summary>
+    [SerializeField] public float maxPitch;
+    /// <summary>How fast the engine pitch will return to idle</summary>
+    [SerializeField] public float pitchReturn;
 
     [Space(5)]
+    ///<summary>Axle information list</summary>
     public List<AxleInfo> axleInfos = new List<AxleInfo>();
 
     [Space(5)]
     [Header("Visual FX")]
+    ///<summary>Speed trails that are activated when boosting going fast</summary>
     public TrailRenderer[] trails; // Speed trails active when boosting and above threshold
+    /// <summary>"Wind" lines that are active when travelling fast</summary>
     public ParticleSystem speedLines; // "Wind" lines when traveling fast
+    /// <summary>Exhaust from car when boosting</summary>
     public ParticleSystem boostExhaust; // Exhaust from the car when boosting
-    public float nominalFov; // Standard FOV for the camera when not movng
-    public float movingFov; // FOV when travelling normally.
-    public float boostFov; // FOV when travelling fast
-    public float fovDamp; // The damping for fov zoom out when travelling fast, high values denote smoother movement
+    /// <summary>Standard FOV for the camera when not moving</summary>
+    public float nominalFov;
+    /// <summary>FOV when travelling normally</summary>
+    public float movingFov;
+    /// <summary>FOV when travelling fast</summary>
+    public float boostFov;
+    /// <summary>The damping for fov zoom out when travelling fast, high values denote smoother movement</summary>
+    public float fovDamp;
 
     private float desiredFov;
 
@@ -81,10 +135,6 @@ public class CarController : MonoBehaviour
     public Material brakeLightsEmissive;
 
     public Light[] brakeLights;
-
-
-
-    // Hidden Input values
     
 
     // Start is called before the first frame update
@@ -120,6 +170,9 @@ public class CarController : MonoBehaviour
         _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
     }
 
+    /// <summary>
+    /// Handling activating/deactivation brake lights and emissive material when the player is braking
+    /// </summary>
     private void HandleBrakeLights()
     {
         brakeLightsRenderer.material = CrossPlatformInputController.instance.brakeInput == 1 ? brakeLightsEmissive : brakeLightsStatic;
@@ -131,6 +184,9 @@ public class CarController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Handles speed and boosting FX
+    /// </summary>
     private void HanldeVisualFX()
     {
         float camVel = 0;
@@ -179,6 +235,9 @@ public class CarController : MonoBehaviour
         Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, desiredFov, ref camVel, fovDamp * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Handles the boosting sound and the pitch shifted engine sound using smooth damp. Clamps between min & max values.
+    /// </summary>
     private void HandleEngineSound()
     {
         float vel = 0;
@@ -208,6 +267,9 @@ public class CarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculates and applies steering damp to final input value to then get sent to the wheels
+    /// </summary>
     private void HandleSteeringDamp()
     {
         _currentSteeringDamp = Mathf.InverseLerp(1f, dampStartPerc, speedPerc);
@@ -215,6 +277,9 @@ public class CarController : MonoBehaviour
         _currentSteeringDamp = Mathf.Clamp(_currentSteeringDamp, minSteerDamp, 1f);
     }
 
+    /// <summary>
+    /// Updates all of the axles torque, steering angle, and brake torque based on user input that frame.
+    /// </summary>
     private void UpdateAxles()
     {
         foreach (AxleInfo info in axleInfos)
@@ -248,6 +313,9 @@ public class CarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculates and applies downforce
+    /// </summary>
     private void HandleDownForce()
     {
         // Calculate downforce based on speed
@@ -256,6 +324,9 @@ public class CarController : MonoBehaviour
         _rb.AddForce(Vector3.down * _currentDownforce);
     }
 
+    /// <summary>
+    /// Initializes components and rigidbody
+    /// </summary>
     private void InitializeCar()
     {
         _rb = GetComponent<Rigidbody>();
@@ -265,6 +336,10 @@ public class CarController : MonoBehaviour
         _rb.centerOfMass = _rb.centerOfMass + centerOfMass;
     }
 
+    /// <summary>
+    /// Checks wether the cars wheels are grounded
+    /// </summary>
+    /// <returns>True if ALL 4 wheels are grounded, otherwise false</returns>
     private bool GetGroundedStatus()
     {
         foreach (AxleInfo info in axleInfos)
@@ -280,6 +355,7 @@ public class CarController : MonoBehaviour
         return true;
     }
 
+    // Check for level finished trigger
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "LevelEnd")
@@ -288,6 +364,7 @@ public class CarController : MonoBehaviour
         }
     }
 
+    // Check if we have collided with another gameobjects and play a collision sound.
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.isStatic)
@@ -305,8 +382,12 @@ public class CarController : MonoBehaviour
 [System.Serializable]
 public struct AxleInfo
 {
+    ///<summary>Axle name (front, rear)</summary>
     public string name;
+    ///<summary>Is this axle powered?</summary>
     public bool motor;
+    ///<summary>Is this axle capable of steering?</summary>
     public bool steer;
+    ///<summary>Wheels on this axle</summary>
     public List<Wheel> wheels;
 }

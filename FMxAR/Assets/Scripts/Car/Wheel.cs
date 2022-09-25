@@ -6,31 +6,70 @@ using UnityEngine;
 public class Wheel : MonoBehaviour
 {
     public string name;
+    /// <summary>
+    /// Sideways slip
+    /// </summary>
     [SerializeField] private float lateralSlip;
-    [SerializeField] private float extSlip;
+    /// <summary>
+    /// Slip in the forward/back direction
+    /// </summary>
     [SerializeField] private float forwardSlip;
+    /// <summary>
+    /// True if either lateral or forward slip is above slipping threshold
+    /// </summary>
     [SerializeField] private bool isSlipping;
 
-    private const float SLIPPING_THRESHOLD = 0.5f; // Value this wheel has to cross to be classed as slipping. Note that 0 is no slip, 1 is full slip
+    /// <summary>
+    /// 0 is no slip, 1 is full slip, wheel is deemed slipping above this value
+    /// </summary>
+    private const float SLIPPING_THRESHOLD = 0.5f;
     
     public ParticleSystem psys;
     
-
+    /// <summary>
+    /// Wheel graphic
+    /// </summary>
     public GameObject wheelGraphic;
+    /// <summary>
+    /// Wheel collider
+    /// </summary>
     private WheelCollider wheelCollider;
+    /// <summary>
+    /// Audio source for the wheel
+    /// </summary>
     private AudioSource _audioSrc;
+    /// <summary>
+    /// How much the pitch is randomly shifted for effect
+    /// </summary>
     public float pitchVariation;
+
     private float _startingPitch;
 
-    // ScriptableObject that hold a wheel configuration we can build from
+    /// <summary>
+    /// The scriptable object config that this wheels values are built from
+    /// </summary>
     public WheelProperties wheelProperties;
-    public float baseWheelSoundModifier; // This modifier determines how loud the wheels are when traversing the ground, not slipping.
+    /// <summary>
+    ///  How loud the wheels are when traversing the ground normally; not slipping.
+    /// </summary>
+    public float baseWheelSoundModifier;
 
+    /// <summary>
+    /// True if the wheel is grounded on good terrain, false if the wheel is in the air or on bad terrain.
+    /// </summary>
     public bool goodTerrain;
-    public float baseDampingRate; // The standard damping value each wheel collider starts with
-    public float badTerrainDampingRate; // The damping value this wheel has on bad terrain, causes the wheel to be less powerful
+    /// <summary>
+    /// Standard damping rate for the wheel
+    /// </summary>
+    public float baseDampingRate;
+    /// <summary>
+    /// The damping rate for the wheel when in the air or on bad terrain
+    /// </summary>
+    public float badTerrainDampingRate;
 
-
+    /// <summary>
+    /// Returns true if this wheel is grounded
+    /// </summary>
     public bool WheelGrounded
     {
         get
@@ -39,6 +78,10 @@ public class Wheel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initializes wheel collider values
+    /// </summary>
+    /// <returns>False if failed to initialise</returns>
     private bool InitWheelCollider()
     {
         // Grab the collider from the gameobject
@@ -107,6 +150,10 @@ public class Wheel : MonoBehaviour
         return newCurve;
     }
 
+    /// <summary>
+    /// Returns this wheels wheel collider
+    /// </summary>
+    /// <returns>This wheels collider</returns>
     public WheelCollider GetWheelCollider()
     { 
         return wheelCollider;
@@ -147,6 +194,9 @@ public class Wheel : MonoBehaviour
         lateralSlip = Mathf.Abs(GetWheelHit().sidewaysSlip);
     }
 
+    /// <summary>
+    /// Updates the position of the graphical wheel
+    /// </summary>
     private void UpdateGraphicPosition()
     {
         Vector3 position;
@@ -156,6 +206,10 @@ public class Wheel : MonoBehaviour
         wheelGraphic.transform.rotation = rotation;
     }
 
+    /// <summary>
+    /// Returns wheel hit information this frame
+    /// </summary>
+    /// <returns>Wheel hit</returns>
     public WheelHit GetWheelHit()
     {
         WheelHit hit;
@@ -167,22 +221,19 @@ public class Wheel : MonoBehaviour
         return new WheelHit();
     }
 
+    /// <summary>
+    /// Checks if this wheel is above the slipping threshold
+    /// </summary>
+    /// <returns>True if above slipping threshold</returns>
     public bool IsSlipping()
     {
         return lateralSlip > SLIPPING_THRESHOLD || forwardSlip > SLIPPING_THRESHOLD;
     }
 
-    public WheelFrictionCurve ModifyFrictionMultiplier(WheelFrictionCurve curveToModify, float multiplier)
-    {
-        // Pass in the curve you want to modify
-        // Returns the modifier curve
-        // Reset that curve by passing it into ResetFrictionMultiplier
-        WheelFrictionCurve modifiedCurve = curveToModify; // ps-b-ref
-        modifiedCurve.stiffness *= multiplier;
-        return modifiedCurve;
-        
-    }
-
+    /// <summary>
+    /// Checks for good terrain
+    /// </summary>
+    /// <returns>True if wheel on good terrain, false if in air or on bad terrain</returns>
     private bool GoodTerrainCheck()
     {
         if (WheelGrounded)
@@ -193,7 +244,6 @@ public class Wheel : MonoBehaviour
         {
             return false;
         }
-        return true;
     }
 
     public void OnDrawGizmos()

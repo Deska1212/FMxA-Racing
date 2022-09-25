@@ -13,10 +13,14 @@ public class CrossPlatformInputController : MonoBehaviour
         TOUCH
     }
 
-    public static CrossPlatformInputController instance;
-
+    public static CrossPlatformInputController instance; // Singleton
+    
+    /// <summary>
+    /// Cross platform input method
+    /// </summary>
     public InputMethod inputMethod;
 
+    // Input values
     public float horizontalInput;
     public float brakeInput;
     public float reverseInput;
@@ -29,34 +33,14 @@ public class CrossPlatformInputController : MonoBehaviour
 
     public TextMeshProUGUI switchInputsText;
 
-    private Button boostButton;
-    private Button throttleButton;
-    private Button brakeButton;
 
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        bool fail = FindButtons();
-        if (!fail)
-            Debug.LogError("ERROR: Could not find mobile UI!");
-       
-        
     }
 
-    private bool FindButtons()
-    {
-        boostButton = GameObject.Find("BoostButton").GetComponent<Button>();
-        throttleButton = GameObject.Find("ThrottleButton").GetComponent<Button>();
-        brakeButton = GameObject.Find("BrakeButton").GetComponent<Button>();
-
-        if (boostButton == null || throttleButton == null || brakeButton == null)
-        {
-            return false;
-        }
-        return true;
-    }
 
 
     // Update is called once per frame
@@ -91,6 +75,9 @@ public class CrossPlatformInputController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Checks for player input on pc and sets values
+    /// </summary>
     private void HandlePCInputs()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -99,6 +86,10 @@ public class CrossPlatformInputController : MonoBehaviour
         brakeInput = Input.GetKey(KeyCode.Space) ? 1 : 0;
         boostInput = Input.GetKey(KeyCode.LeftShift);
     }
+
+    /// <summary>
+    /// Checks for player input on mobile devices and sets values
+    /// </summary>
     private void HandleMobileInputs()
     {
         horizontalInput = SteeringWheel.instance.Value;

@@ -25,6 +25,9 @@ public class MainMenu : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Displays each track panels best times in the main menu
+    /// </summary>
     private void DisplayBestTimer()
     {
         trackOneBestTime.text = TimeTrialManager.instance.levelDatas[0].bestTime.ToString("F2") + "s";

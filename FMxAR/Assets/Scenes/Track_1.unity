@@ -338,18 +338,6 @@ PrefabInstance:
       propertyPath: speedLines
       value: 
       objectReference: {fileID: 912565208}
-    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: boostTorque
-      value: 2800
-      objectReference: {fileID: 0}
-    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: boostRemovedPerSec
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8232282456846650735, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
-      propertyPath: boostAcqSpeedThreshold
-      value: 0.75
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1a4a1902a02b1e4eaf65729b751fe2c, type: 3}
 --- !u!1001 &98609831
@@ -1625,7 +1613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdf7d2bdbc73cd4888e8d3d64021e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputMethod: 0
+  inputMethod: 1
   horizontalInput: 0
   brakeInput: 0
   reverseInput: 0

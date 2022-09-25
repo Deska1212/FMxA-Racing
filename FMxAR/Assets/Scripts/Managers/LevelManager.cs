@@ -17,6 +17,10 @@ public class LevelManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Loads a scene based on index
+    /// </summary>
+    /// <param name="index">Build index of scene to load</param>
     public void LoadLevel(int index)
     { 
         SceneManager.LoadScene(index);

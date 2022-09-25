@@ -4997,8 +4997,8 @@ MonoBehaviour:
   centerOfMass: {x: 0, y: -1.3, z: 0}
   maxDownforce: 450
   minDownforce: 100
-  maxSpeed: 28
-  brakeTorque: 1800
+  maxSpeed: 30
+  brakeTorque: 3000
   engine: {fileID: 8232282456846650735}
   engineAudioSrc: {fileID: 8232282456846650733}
   boostAudioSrc: {fileID: 2208322448540360431}
@@ -5051,11 +5051,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standardTorque: 1600
   minTorque: 600
-  boostTorque: 2400
+  boostTorque: 3000
   boost: 100
   boostAcqWhenInThreshold: 35
-  boostAcqSpeedThreshold: 0.85
-  boostRemovedPerSec: 15
+  boostAcqSpeedThreshold: 0.75
+  boostRemovedPerSec: 8
   isBoosting: 0
   boostAcquisition: 0
   currentTorque: 0

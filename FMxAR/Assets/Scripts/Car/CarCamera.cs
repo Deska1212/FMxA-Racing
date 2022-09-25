@@ -26,7 +26,6 @@ public class CarCamera : MonoBehaviour
     // I have to put this in fixed update so it is smooth and doesn't jitter.
     void FixedUpdate()
     {
-                                                                    // Initialise Velocity vector and set to zero
         Vector3 localOff = target.right * offset.x + target.up * offset.y + target.forward * offset.z;  // Convert the offset to a local position and store it in a vector
         Vector3 pos = target.transform.position + localOff;                                             // Add the offset to desired camera position
         Vector3 dirToTarget = target.position - transform.position;                                     // Get a vector pointing from the camera to the car

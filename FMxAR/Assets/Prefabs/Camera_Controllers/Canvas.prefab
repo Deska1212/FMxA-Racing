@@ -2434,7 +2434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 62, y: 57}
+  m_AnchoredPosition: {x: 102, y: 77}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1642550346196538608
@@ -2449,11 +2449,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 498c366b083625b49bf2de31ee9c4074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAngle: 360
+  maxAngle: 90
   valueMultiplier: 1
   returnSpeed: 720
   wheelBeingHeld: 0
-  nearThreshold: 100
+  nearThreshold: 50
   _value: 0
 --- !u!222 &1642550346196538614
 CanvasRenderer:
